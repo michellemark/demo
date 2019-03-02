@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+{% load utility_tags %}
+{% block page_content %}
+<div class="row my-4">
+    <h1 class="cover-heading d-block col-12">
+        Demo Search
+    </h1>
+    <p class="lead ml-4">
+        A quick and dirty proof of concept using RET api
+    </p>
+</div>
+{% if form %}
+<div class="row text-left mb-2">
+    <div class="col-12">
+        <div class="card border-info">
+            <h3 class="card-header border-info text-info">
+                Detailed Search
+            </h3>
+            <div class="card-body">
+                <form method="post" action="{% url 'buyersearch' %}">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input class="btn btn-primary" type="submit" value="Search">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="row text-left mb-2">
+    <div class="col-12">
+        <div class="card border-primary">
+            <h3 class="card-header border-primary text-primary">
+                Results
+            </h3>
+            <div id="search-results" class="card-body">
+            {% if search_results %}
+            {% if "error_message" in search_results %}
+                {{ search_results.error_message }}
+            {% else %}
+            <h4>
+                Found {{ search_results|length }} Matches
+            </h4>
+            {% for result in search_results %}
+                <div class="card">
+                    <div class="card-body {% cycle 'bg-dark' 'bg-light' %} {% cycle 'text-light' 'text-dark' %}">
+                        {% if result.photos %}
+                        <div id="carouselExampleFade{{ forloop.counter }}"
+                             class="col-12 col-md-8 mx-auto carousel slide carousel-fade"
+                             data-ride="carousel" data-interval="false">
+                            <div class="carousel-inner">
+                                {% for photo in result.photos %}
+                                    <div class="carousel-item {% if forloop.first %} active{% endif %}">
+                                        <img src="{{ photo }}" class="col-12 d-block w-100"
+                                             alt="Photograph {{ forloop.counter }}">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleFade{{ forloop.counter }}"
+                               role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleFade{{ forloop.counter }}"
+                               role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        {% endif %}
+                        <ul class="mx-0 px-0">
+                            <li class="list-unstyled">
+                                <h4>
+                                    Address:
+                                </h4>
+                                {{ result.address.full }},
+                                <br>
+                                {{ result.address.city }}, {{ result.address.state }} {{ result.postalCode }}
+                                <br>
+                                {{ result.crossStreet }}
+                            </li>
+                            <li class="list-unstyled">
+                                <h4>
+                                    List Price: {{ result.listPrice|money }}
+                                </h4>
+                            </li>
+                            <li class="list-unstyled">
+                                <h4>
+                                    Description:
+                                </h4>
+                                <p>
+                                    {{ result.remarks }}
+                                </p>
+                            </li>
+                            <li class="list-unstyled">
+                                <h4>
+                                    Home Details
+                                </h4>
+                                <div class="row">
+                                    <div class="col-12 col-md-5">
+                                        <ul>
+                                            <li>
+                                                Subtype: {{ result.property.subType }}
+                                            </li>
+                                            <li>
+                                                Roof: {{ result.property.roof }}
+                                            </li>
+                                            <li>
+                                                Cooling: {{ result.property.cooling }}
+                                            </li>
+                                            <li>
+                                                Heating: {{ result.property.heating }}
+                                            </li>
+                                            <li>
+                                                Style: {{ result.proptery.style }}
+                                            </li>
+                                            <li>
+                                                Square footage: {{ result.property.area }}
+                                            </li>
+                                            <li>
+                                                Bedrooms: {{ result.property.bedrooms }}
+                                            </li>
+                                            <li>
+                                                Bathrooms: {{ result.property.bathrooms }}
+                                            </li>
+                                            <li>
+                                                Full baths: {{ result.property.bathsFull }}
+                                            </li>
+                                            <li>
+                                                Half baths: {{ result.property.bathsHalf }}
+                                            </li>
+                                            <li>
+                                                Stories: {{ result.property.stories }}
+                                            </li>
+                                            <li>
+                                                Fireplaces: {{ result.property.fireplaces }}
+                                            </li>
+                                            <li>
+                                                Flooring: {{ result.property.flooring }}
+                                            </li>
+                                            <li>
+                                                Foundation: {{ result.property.foundation }}
+                                            </li>
+                                            <li>
+                                                Laundry: {{ result.property.laundryFeatures }}
+                                            </li>
+                                            <li>
+                                                Occupant Name: {{ result.property.occupantName }}
+                                            </li>
+                                            <li>
+                                                Owner Name: {{ result.property.ownerName }}
+                                            </li>
+                                            <li>
+                                                Subdivision: {{ result.property.subdivision }}
+                                            </li>
+                                            <li>
+                                                Lot size: {{ result.property.lotSizeArea }}
+                                            </li>
+                                            <li>
+                                                Lot Description: {{ result.property.lotDescription }}
+                                            </li>
+                                            <li>
+                                                Pool: {{ result.property.pool }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-12 col-md-5">
+                                        <ul>
+                                            <li>
+                                                Interior features: {{ result.property.interiorFeatures }}
+                                            </li>
+                                            <li>
+                                                Lot size: {{ result.property.lotSize }}
+                                            </li>
+                                            <li>
+                                                Area source: {{ result.property.areaSource }}
+                                            </li>
+                                            <li>
+                                                Maintenance Expense: {{ result.property.maintenanceExpense }}
+                                            </li>
+                                            <li>
+                                                Additional rooms: {{ result.property.additionalRooms }}
+                                            </li>
+                                            <li>
+                                                Exterior features: {{ result.property.exteriorFeatures }}
+                                            </li>
+                                            <li>
+                                                Water: {{ result.property.water }}
+                                            </li>
+                                            <li>
+                                                View: {{ result.property.view }}
+                                            </li>
+                                            <li>
+                                                Construction: {{ result.property.construction }}
+                                            </li>
+                                            <li>
+                                                Parking: {{ result.property.parking.description }}
+                                                <br>
+                                                Spaces: {{ result.property.parking.spaces }}
+                                                <br>
+                                                Leased: {{ result.property.parking.leased }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-unstyled">
+                                <h4>Listing Agent:</h4>
+                                {{ result.agent.firstName }} {{ result.agent.lastName }}
+                                <br>
+                                Contact Info: {{ result.agent.contact }}
+                            </li>
+                            <li class="list-unstyled">
+                                <h4>
+                                    School Information:
+                                </h4>
+                                <ul>
+                                    <li>
+                                        District: {{ result.school.district }}
+                                    </li>
+                                    <li>
+                                        Elementary School: {{ result.school.elementarySchool }}
+                                    </li>
+                                    <li>
+                                        Middle School: {{ result.school.middleSchool }}
+                                    </li>
+                                    <li>
+                                        High School: {{ result.school.highSchool }}
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="list-unstyled">
+                                <h4>
+                                    MLS Info
+                                </h4>
+                                <ul>
+                                    <li>
+                                        MLS ID: {{ result.mlsId }}
+                                    </li>
+                                    <li>
+                                        Status: {{ result.mls.status }}
+                                    </li>
+                                    <li>
+                                        Area: {{ result.mls.area }}
+                                    </li>
+                                    <li>
+                                        Days on Market: {{ result.mls.daysOnMarket }}
+                                    </li>
+                                    <li>
+                                        Originating System Name: {{ result.mls.originatingSystemName }}
+                                    </li>
+                                    <li>
+                                        Area Minor: {{ result.mls.areaMinor }}
+                                    </li>
+                                    <li>
+                                        Listing ID: {{ result.listingId }}
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+            {% endif %}
+            {% else %}
+                Select any options desired and Search to see Homes
+            {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
