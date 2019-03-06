@@ -87,3 +87,4 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.environ.get("STATIC_ROOT")
 SIMPLY_RETS_API_KEY = os.environ.get("SIMPLY_RETS_API_KEY")
 SIMPLY_RETS_API_SECRET = os.environ.get("SIMPLY_RETS_API_SECRET")
+SIMPLY_REST_DOMAIN = "https://api.simplyrets.com"
