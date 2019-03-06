@@ -9,7 +9,8 @@ def money(value):
     try:
         value = int(value)
     except ValueError:
-        pass
+        if isinstance(value, str):
+            value = f"${value}"
     else:
         value = f"${value:,}"
 
