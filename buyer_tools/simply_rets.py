@@ -1,7 +1,7 @@
 import requests
 from requests.auth import HTTPBasicAuth
 
-from buyer_tools.constants import (RETS_KEY_MAP, BAD_REQUEST_MESSAGE, LOGIN_REQUIRED_MESSAGE,
+from buyer_tools.constants import (RETS_PROPERTIES_KEY_MAP, BAD_REQUEST_MESSAGE, LOGIN_REQUIRED_MESSAGE,
                                    ERRORED_KEY, FORBIDDEN_MESSAGE, API_RATE_LIMIT_HIT_MESSAGE,
                                    SERVER_ERROR_MESSAGE, UNKNOWN_ERROR_MESSAGE)
 from gwenn_demo.settings.prod import (SIMPLY_RETS_API_KEY, SIMPLY_RETS_API_SECRET, SIMPLY_REST_DOMAIN)
@@ -17,7 +17,7 @@ class SimplyRets:
     def create_parameters(self, data):
         parameters = {}
 
-        for next_key, next_rets_key in RETS_KEY_MAP.items():
+        for next_key, next_rets_key in RETS_PROPERTIES_KEY_MAP.items():
 
             if next_key in data:
 
@@ -56,6 +56,15 @@ class SimplyRets:
         parameters["limit"] = limit
         parameters["lastId"] = offset
 
+        property_results = self.make_rets_call(url=url, parameters=parameters)
+
+        return property_results
+
+    def get_property(self, mls_id, data, limit=50, offset=0):
+        url = f"{self.domain}/properties/{mls_id}"
+        parameters = self.create_parameters(data)
+        parameters["limit"] = limit
+        parameters["lastId"] = offset
         property_results = self.make_rets_call(url=url, parameters=parameters)
 
         return property_results

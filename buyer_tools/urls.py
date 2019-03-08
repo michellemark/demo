@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path, re_path
 
-from buyer_tools.views import BuyerSearchView
+from buyer_tools.views import PropertySearchView, PropertyDetailView
 
 urlpatterns = [
-    path('', BuyerSearchView.as_view(), name="buyersearch"),
+    re_path(r'property/(?P<mls_id>[0-9]{7})/$', PropertyDetailView.as_view(), name="propertydetail"),
+    path('', PropertySearchView.as_view(), name="propertysearch"),
 ]

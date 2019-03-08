@@ -1,4 +1,4 @@
-RETS_KEY_MAP = {
+RETS_PROPERTIES_KEY_MAP = {
     "keywords": "q",
     "status": "status",
     "property_type": "type",
@@ -32,6 +32,10 @@ RETS_KEY_MAP = {
     "include": "include",
     "sort": "sort",
     "count": "count"
+}
+RETS_PROPERTY_KEY_MAP = {
+    "mls_id": "mlsId",
+    "include": "include"
 }
 ERRORED_KEY = "error_message"
 BAD_REQUEST_MESSAGE = "Bad Request"

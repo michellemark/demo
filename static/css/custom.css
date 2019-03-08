@@ -11,3 +11,23 @@ h5,
 h6 {
     font-family: 'Prata', serif !important;
 }
+h1,
+h2 {
+    margin-top: 0.75em;
+}
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 0.5em;
+}
+.property-address {
+    font-size: 1.3em !important;
+}
+#search-results a {
+    color: #212121 !important;
+}
+
+#search-results a:hover {
+    color: #0d47a1 !important;
+}

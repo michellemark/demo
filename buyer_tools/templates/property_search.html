@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load utility_tags %}
+{% block page_content %}
+<div class="row my-4">
+    <h1 class="cover-heading d-block col-12">
+        Demo Search
+    </h1>
+    <p class="lead ml-4">
+        A quick and dirty proof of concept using RET api
+    </p>
+</div>
+{% if form %}
+<div class="row text-left mb-2">
+    <div class="col-12">
+        <div class="card border-info">
+            <h3 class="card-header border-info text-info">
+                Detailed Search
+            </h3>
+            <div class="card-body">
+                <form method="post" action="{% url 'propertysearch' %}">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input class="btn btn-primary" type="submit" value="Search">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="row text-left mb-2">
+    <div class="col-12">
+        <div class="card border-primary">
+            <h3 class="card-header border-primary text-primary">
+                Results
+            </h3>
+            <div id="search-results" class="card-body">
+            {% if search_results %}
+            {% if "error_message" in search_results %}
+                {{ search_results.error_message }}
+            {% else %}
+            <h4>
+                Found {{ search_results|length }} Matches
+            </h4>
+            {% for result in search_results %}
+                <a id="property_detail_{{ forloop.counter }}" href="{% url 'propertydetail' result.mlsId %}">
+                    <div class="card shadow p-3 mb-5 {% cycle 'bg-secondary' 'bg-light' %} {% cycle 'text-light' 'text-dark' %} rounded">
+                        <div class="card-body align-top p-0">
+                            <div class="col-12 col-md-6 d-inline-block p-0 align-top">
+                                {% if result.photos %}
+                                <span id="property_thumb_{{ forloop.counter }}" class="m-0 p-0">
+                                    <img src="{{ result.photos.0 }}" alt="Photograph of {{ result.address.full }}"
+                                         class="img-thumbnail rounded">
+                                </span>
+                                {% else %}
+                                    No Image Available
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-5 p-1 d-inline-block">
+                                <ul class="align-top p-0 d-inline-block">
+                                    <li class="list-unstyled my-3">
+                                        <h4 class="property-address">
+                                            {{ result.address.streetNumberText }} {{ result.address.streetName }},
+                                            <br>
+                                            {{ result.address.city }}, {{ result.address.state }} {{ result.postalCode }}
+                                        </h4>
+                                    </li>
+                                    <li class="list-unstyled">
+                                        <span id="bedrooms_{{ forloop.counter }}" class="text-bold">
+                                            {{ result.property.bedrooms }} bedrooms
+                                        </span>
+                                    </li>
+                                    <li class="list-unstyled mt-3">
+                                        <span id="price_{{ forloop.counter }}">
+                                            {{ result.listPrice|money }}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+            {% endif %}
+            {% else %}
+                Select any options desired and Search to see Homes
+            {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
